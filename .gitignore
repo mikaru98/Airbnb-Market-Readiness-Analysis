@@ -1,0 +1,19 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Local secrets
+.env
+
+# Airflow runtime artifacts
+logs/
+
+# Local PostgreSQL data directory
+postgres_project_m3/
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# OS/editor artifacts
+.DS_Store
+Thumbs.db

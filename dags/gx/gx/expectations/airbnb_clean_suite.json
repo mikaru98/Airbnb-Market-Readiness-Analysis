@@ -1,0 +1,126 @@
+{
+  "data_asset_type": null,
+  "expectation_suite_name": "airbnb_clean_suite",
+  "expectations": [
+    {
+      "expectation_type": "expect_column_values_to_be_unique",
+      "kwargs": {
+        "column": "listing_key"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "availability_365",
+        "max_value": 365,
+        "min_value": 0
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "room_type",
+        "value_set": [
+          "Entire home/apt",
+          "Private room",
+          "Hotel room",
+          "Shared room"
+        ]
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_type_list",
+      "kwargs": {
+        "column": "id",
+        "type_list": [
+          "int64",
+          "int",
+          "integer"
+        ]
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "city",
+        "value_set": [
+          "Amsterdam",
+          "Bangkok",
+          "Barcelona",
+          "London",
+          "Paris",
+          "Rome",
+          "Sydney"
+        ]
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "price",
+        "max_value": 1085147,
+        "min_value": 0
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "scrape_date",
+        "value_set": [
+          "2026-03-29"
+        ]
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_table_row_count_to_equal",
+      "kwargs": {
+        "value": 292802
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_distinct_values_to_equal_set",
+      "kwargs": {
+        "column": "city",
+        "value_set": [
+          "Amsterdam",
+          "Bangkok",
+          "Barcelona",
+          "London",
+          "Paris",
+          "Rome",
+          "Sydney"
+        ]
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_match_regex",
+      "kwargs": {
+        "column": "listing_key",
+        "regex": "^[A-Za-z]+-\\d+$"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_median_to_be_between",
+      "kwargs": {
+        "column": "availability_365",
+        "max_value": 365,
+        "min_value": 0
+      },
+      "meta": {}
+    }
+  ],
+  "ge_cloud_id": null,
+  "meta": {
+    "great_expectations_version": "0.18.19"
+  }
+}

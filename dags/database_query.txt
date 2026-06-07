@@ -1,0 +1,54 @@
+
+
+Syntax DDL for Creating Table:
+
+cur = connection.cursor()
+
+q = '''
+CREATE TABLE table_m3 (
+    id BIGINT,
+    name TEXT,
+    host_id BIGINT,
+    host_name TEXT,
+    neighbourhood_group TEXT,
+    neighbourhood TEXT,
+    latitude DOUBLE PRECISION,
+    longitude DOUBLE PRECISION,
+    room_type TEXT,
+    price DOUBLE PRECISION,
+    minimum_nights BIGINT,
+    number_of_reviews BIGINT,
+    last_review DATE,
+    reviews_per_month DOUBLE PRECISION,
+    calculated_host_listings_count BIGINT,
+    availability_365 BIGINT,
+    number_of_reviews_ltm BIGINT,
+    license TEXT,
+    city TEXT,
+    scrape_date DATE
+);
+'''
+
+cur.execute(q)
+connection.commit()
+
+print("table_m3 created")
+
+Syntax DML for inserting data to Database:
+
+raw_file = 'data_raw.csv'
+
+postgres_url = "postgresql+psycopg2://airflow:airflow@localhost:5434/airflow"  # Host-machine PostgreSQL URL.
+
+engine = create_engine(postgres_url)  # Buat SQL Alchemy engies biar pandas bisa write ke PostgreSQL.
+
+df = pd.read_csv(raw_file, low_memory=False)  # Baca  raw CSV sesuai dengan yang di download, tanpa data cleaning dulu.
+
+
+df.to_sql(
+    "table_m3", 
+    engine, 
+    if_exists="append", 
+    index=False)  # Insert all raw rows into table_m3 without writing the DataFrame index.
+
+print("Insert success!")
