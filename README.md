@@ -1,107 +1,111 @@
 # Airbnb Market Readiness Analysis
 
 ## Repository Outline
-`Bagian ini menjelaskan secara singkat konten/isi dari file yang dipush ke repository`
 
-Contoh:
-```
-1. description.md - Dokumentasi utama project
-2. airflow_ES.yaml - Konfigurasi Docker Compose buat menjalankan PostgreSQL, Airflow, Elasticsearch dan Kibana.
-3. `dags/DAG.py` - Airflow ETL pipeline dari PostgreSQL ke Elasticsearch.
-4. `dags/database_query.txt` - Pembuatan tabel PostgreSQL  dan script memasukan data mentah. 
-5. `dags/data_raw.csv` - Dataset asli Airbnb.
-6. `dags/extracted.csv` - Data yang diekstrak sementara dari Postgresql.
-7. `dags/data_clean.csv` - Dataset bersih untuk Elasticsearch dan Kibana
-8. `dags/GX.ipynb` - Great Expectations validation notebook.
-9. `dags/gx/` - Great Expectations suite, checkpoint, validation result, dan data docs.
-10. `images/` - Kibana dashboard screenshots dan insights.
+`This section briefly explains the content of each file pushed to the repository.`
 
+Example:
+
+```text
+1. description.md - Main project documentation
+2. airflow_ES.yaml - Docker Compose configuration for running PostgreSQL, Airflow, Elasticsearch, and Kibana
+3. dags/DAG.py - Airflow ETL pipeline from PostgreSQL to Elasticsearch
+4. dags/database_query.txt - PostgreSQL table creation and raw data insertion script
+5. dags/data_raw.csv - Original Airbnb dataset
+6. dags/extracted.csv - Temporary extracted data from PostgreSQL
+7. dags/data_clean.csv - Cleaned dataset for Elasticsearch and Kibana
+8. dags/GX.ipynb - Great Expectations validation notebook
+9. dags/gx/ - Great Expectations suite, checkpoint, validation results, and data docs
+10. images/ - Kibana dashboard screenshots and insights
 ```
 
 ## Problem Background
-Project ini menganalisis data listing Airbnb dari beberapa kota besar, seperti Amsterdam, Bangkok, Barcelona, London, Paris, Rome, dan Sydney.
 
-Dalam skenario bisnis, project ini ditujukan untuk membantu tim ekspansi short-term rental/penyewaan jangka pendek dalam memahami kesiapan pasar di setiap 7 kota besar tersebut. Analisis dilakukan dengan melihat jumlah listing, tipe kamar, tingkat ketersediaan, aktivitas review, kepemilikan lisensi, dan segmentasi host.
+This project analyzes Airbnb listing data from several major cities, including Amsterdam, Bangkok, Barcelona, London, Paris, Rome, and Sydney.
 
-Dengan analisis ini, tim bisnis dapat membandingkan kota mana yang memiliki permintaan tinggi, kota mana yang lebih kompetitif, dan kota mana yang memiliki risiko operasional atau regulasi lebih besar.
+From a business perspective, this project is designed to help a short-term rental expansion team understand market readiness across these seven major cities. The analysis focuses on the number of listings, room types, availability levels, review activity, license ownership, and host segmentation.
 
+Through this analysis, the business team can compare which cities show high demand, which cities are more competitive, and which cities may carry higher operational or regulatory risks.
 
 ## Project Output
-Output utama dari project ini adalah pipeline ETL otomatis dan dashboard Kibana.
 
-Pipeline dibuat menggunakan Apache Airflow untuk mengambil data dari PostgreSQL, membersihkan data menggunakan Python, menyimpan hasil cleaning ke CSV, lalu mengirim data bersih ke Elasticsearch. Setelah itu, data divisualisasikan menggunakan Kibana dalam bentuk dashboard.
+The main output of this project is an automated ETL pipeline and a Kibana dashboard.
 
-Dashboard Kibana berisi:
+The pipeline is built using Apache Airflow to extract data from PostgreSQL, clean the data using Python, save the cleaned results into a CSV file, and send the cleaned data to Elasticsearch. After that, the data is visualized using Kibana in the form of a dashboard.
 
-- 1 markdown introduction dan objective.
-- 6 visualisasi utama.
-- Insight bisnis untuk setiap visualisasi.
-- Kesimpulan dan rekomendasi lanjutan berdasarkan hasil eksplorasi.
-`
+The Kibana dashboard contains:
+
+* 1 markdown introduction and objective
+* 6 main visualizations
+* Business insights for each visualization
+* Conclusions and follow-up recommendations based on the exploration results
 
 ## Data
-Dataset yang digunakan adalah data listing Airbnb dari tujuh kota besar yang di ambil dari Kaggle.
 
-Data mentah memiliki:
+The dataset used in this project is Airbnb listing data from seven major cities, sourced from Kaggle.
 
-- Jumlah baris: `292,802`
-- Jumlah kolom awal: `20`
-- Jumlah kolom setelah cleaning: `24`
-- Jumlah duplikat setelah cleaning: `0`
-- Missing value setelah cleaning: `0`
+The raw data contains:
 
-Kolom tambahan yang dibuat setelah proses cleaning untuk membantu visualisasi dan eksplorasi:
+* Number of rows: `292,802`
+* Initial number of columns: `20`
+* Number of columns after cleaning: `24`
+* Number of duplicates after cleaning: `0`
+* Missing values after cleaning: `0`
 
-- `has_price`
-- `has_license`
-- `host_segment`
-- `listing_key`
+Additional columns created after the cleaning process to support visualization and exploration:
 
-Distribusi jumlah listing per kota:
+* `has_price`
+* `has_license`
+* `host_segment`
+* `listing_key`
 
-| Kota | Jumlah Listing |
-|---|---:|
-| London | 96,871 |
-| Paris | 81,853 |
-| Rome | 37,652 |
-| Bangkok | 28,806 |
-| Barcelona | 19,410 |
-| Sydney | 17,730 |
-| Amsterdam | 10,480 |
+Listing distribution by city:
 
-Catatan penting: data harga untuk Paris dan Sydney tidak tersedia, jadi rekomendasi terkait pricing hanya dapat digunakan untuk kota yang memiliki data harga.
+| City      | Number of Listings |
+| --------- | -----------------: |
+| London    |             96,871 |
+| Paris     |             81,853 |
+| Rome      |             37,652 |
+| Bangkok   |             28,806 |
+| Barcelona |             19,410 |
+| Sydney    |             17,730 |
+| Amsterdam |             10,480 |
+
+Important note: price data for Paris and Sydney is not available, so pricing-related recommendations can only be applied to cities that have price data.
 
 ## Method
 
-1. Data mentah dimasukkan ke PostgreSQL ke dalam tabel `table_m3`.
-2. Airflow menjalankan DAG dengan tiga task utama:
-   - `fetch_from_postgresql`
-   - `data_cleaning`
-   - `post_to_elasticsearch`
-3. Data diekstrak dari PostgreSQL dan disimpan sebagai file sementara.
-4. Data dibersihkan menggunakan Python dan Pandas.
-5. Proses cleaning mencakup:
-   - Menghapus data duplikat.
-   - Menormalisasi nama kolom menjadi lowercase dan snake_case.
-   - Mengisi missing value.
-   - Mengubah format tanggal.
-   - Membuat kolom tambahan untuk analisis.
-6. Data bersih divalidasi menggunakan Great Expectations.
-7. Data bersih dikirim ke Elasticsearch.
-8. Data divisualisasikan menggunakan Kibana.
+1. Raw data was inserted into PostgreSQL in the `table_m3` table.
+2. Airflow runs a DAG with three main tasks:
+
+   * `fetch_from_postgresql`
+   * `data_cleaning`
+   * `post_to_elasticsearch`
+3. Data is extracted from PostgreSQL and saved as a temporary file.
+4. Data is cleaned using Python and Pandas.
+5. The cleaning process includes:
+
+   * Removing duplicate data
+   * Normalizing column names into lowercase and snake_case format
+   * Filling missing values
+   * Converting date formats
+   * Creating additional columns for analysis
+6. The cleaned data is validated using Great Expectations.
+7. The cleaned data is sent to Elasticsearch.
+8. The data is visualized using Kibana.
 
 ## Stacks
 
-- Python
-- Pandas
-- Apache Airflow
-- PostgreSQL
-- SQLAlchemy
-- Great Expectations
-- Elasticsearch
-- Kibana
-- Docker Compose
+* Python
+* Pandas
+* Apache Airflow
+* PostgreSQL
+* SQLAlchemy
+* Great Expectations
+* Elasticsearch
+* Kibana
+* Docker Compose
 
 ## Reference
 
-- Url Dataset dari Kaggle("https://www.kaggle.com/datasets/darkmatternet/airbnb-listings-nyc-london-paris-tokyo-and-more")
+* Kaggle Dataset URL: [Airbnb Listings NYC, London, Paris, Tokyo, and More](https://www.kaggle.com/datasets/darkmatternet/airbnb-listings-nyc-london-paris-tokyo-and-more)
